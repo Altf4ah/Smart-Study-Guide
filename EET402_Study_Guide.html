@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EET402 Study Guide</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; }
+  .header { background: #1a1a2e; color: white; padding: 2rem; text-align: center; }
+  .header h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px; }
+  .header p { color: #aaa; font-size: 0.9rem; margin-top: 0.4rem; }
+  .tabs { display: flex; overflow-x: auto; background: #16213e; padding: 0 2rem; gap: 4px; }
+  .tab { padding: 0.75rem 1.2rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: #888; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; }
+  .tab.active { color: white; border-bottom-color: #e94560; }
+  .tab:hover { color: #ccc; }
+  .content { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; }
+  .content.active { display: block; }
+  .section { background: white; border-radius: 10px; padding: 1.5rem; margin-bottom: 1.2rem; border: 1px solid #e8e8e8; }
+  .section-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .topic-title { font-size: 1rem; font-weight: 700; color: #1a1a2e; }
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+  .badge { font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+  .badge.hot { background: #ffebeb; color: #c0392b; }
+  .badge.warm { background: #fff3e0; color: #e67e22; }
+  .badge.marks { background: #e8f5e9; color: #2e7d32; }
+  .badge.year { background: #e8eaf6; color: #3949ab; }
+  .priority-bar { display: flex; gap: 3px; align-items: center; flex-shrink: 0; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot.filled { background: #e94560; }
+  .dot.empty { background: #ddd; }
+  .points { list-style: none; padding: 0; }
+  .points li { padding: 0.4rem 0; padding-left: 1.2rem; position: relative; font-size: 0.88rem; color: #333; line-height: 1.5; border-bottom: 1px solid #f5f5f5; }
+  .points li:last-child { border-bottom: none; }
+  .points li::before { content: "→"; position: absolute; left: 0; color: #e94560; font-weight: 700; font-size: 0.75rem; top: 0.42rem; }
+  .formula-box { background: #f0f4ff; border-left: 4px solid #3949ab; border-radius: 0 8px 8px 0; padding: 0.8rem 1rem; margin: 0.8rem 0; font-family: 'Courier New', monospace; font-size: 0.88rem; color: #1a237e; }
+  .tip-box { background: #fffde7; border-left: 4px solid #f9a825; border-radius: 0 8px 8px 0; padding: 0.8rem 1rem; margin: 0.8rem 0; font-size: 0.85rem; color: #5f3b00; }
+  .tip-box strong { font-weight: 700; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .summary-card { background: white; border-radius: 10px; padding: 1.2rem; text-align: center; border: 1px solid #e8e8e8; }
+  .summary-card .num { font-size: 2rem; font-weight: 800; color: #e94560; }
+  .summary-card .label { font-size: 0.75rem; color: #777; margin-top: 4px; }
+  .qmap { background: white; border-radius: 10px; padding: 1.5rem; border: 1px solid #e8e8e8; margin-bottom: 1.2rem; }
+  .qmap h3 { font-size: 0.9rem; font-weight: 700; color: #1a1a2e; margin-bottom: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  th { background: #1a1a2e; color: white; padding: 8px 10px; text-align: left; font-weight: 600; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; color: #333; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+  .freq { display: inline-block; width: 60px; background: #e8eaf6; border-radius: 20px; text-align: center; padding: 2px 0; font-size: 0.75rem; color: #3949ab; font-weight: 600; }
+  .freq.high { background: #ffebeb; color: #c0392b; }
+  .module-tag { display: inline-block; background: #e8f5e9; color: #2e7d32; border-radius: 4px; padding: 1px 6px; font-size: 0.72rem; font-weight: 600; }
+  h2.section-main { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-bottom: 1.2rem; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } .content { padding: 1rem; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>EET402 — Electrical System Design & Estimation</h1>
+  <p>Smart Study Guide · Based on April 2025, May 2024, June 2023 Question Papers</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="show('overview')">Overview</div>
+  <div class="tab" onclick="show('m1')">Module 1</div>
+  <div class="tab" onclick="show('m2')">Module 2</div>
+  <div class="tab" onclick="show('m3')">Module 3</div>
+  <div class="tab" onclick="show('m4')">Module 4</div>
+  <div class="tab" onclick="show('m5')">Module 5</div>
+</div>
+
+<!-- OVERVIEW -->
+<div id="overview" class="content active">
+  <div class="summary-grid">
+    <div class="summary-card"><div class="num">3</div><div class="label">Question Papers Analysed</div></div>
+    <div class="summary-card"><div class="num">5</div><div class="label">Modules</div></div>
+    <div class="summary-card"><div class="num">100</div><div class="label">Total Marks</div></div>
+    <div class="summary-card"><div class="num">28</div><div class="label">High Priority Topics</div></div>
+  </div>
+
+  <div class="qmap">
+    <h3>Exam Pattern</h3>
+    <table>
+      <tr><th>Part</th><th>Structure</th><th>Marks Each</th><th>Total</th></tr>
+      <tr><td>Part A</td><td>10 questions, all compulsory (2 per module)</td><td>3</td><td>30</td></tr>
+      <tr><td>Part B</td><td>5 modules × 1 question from 2 choices</td><td>14</td><td>70</td></tr>
+    </table>
+  </div>
+
+  <div class="qmap">
+    <h3>Most Repeated Topics Across All 3 Years</h3>
+    <table>
+      <tr><th>Topic</th><th>Module</th><th>Appeared</th></tr>
+      <tr><td>IS 732 &amp; IS 3043 — features and significance</td><td><span class="module-tag">M1</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Electricity Act 2003 — scope and features</td><td><span class="module-tag">M1</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>NEC 2011 — importance, scope, standardization</td><td><span class="module-tag">M1</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Graphical symbols (NEC / IS)</td><td><span class="module-tag">M1</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Luminous flux, intensity, illuminance — definitions</td><td><span class="module-tag">M2</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Average lumen method — number of lamps calculation</td><td><span class="module-tag">M2</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Road lighting design — pole spacing formula</td><td><span class="module-tag">M2</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Pre-commissioning tests for domestic installation</td><td><span class="module-tag">M3</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>MCB, MCCB, ELCB/RCCB, RCBO — working &amp; differences</td><td><span class="module-tag">M3</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>House wiring — sub-circuits, SLD, load calculation</td><td><span class="module-tag">M3</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Substation design — SLD and materials list</td><td><span class="module-tag">M4</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Motor circuit cable &amp; CB selection</td><td><span class="module-tag">M4</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Solar PV system — design and components</td><td><span class="module-tag">M5</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Generator ratings (prime, continuous, standby)</td><td><span class="module-tag">M5</span></td><td><span class="freq high">3/3 years</span></td></tr>
+      <tr><td>Rising mains in high-rise buildings</td><td><span class="module-tag">M5</span></td><td><span class="freq high">3/3 years</span></td></tr>
+    </table>
+  </div>
+
+  <div class="tip-box"><strong>Strategy:</strong> Part A has 2 questions per module — always 3 marks each. Prepare crisp 4-5 line answers for definitions and short concepts. Part B is 14 marks — always one numerical or design problem + one theory question. Focus on formulas and step-by-step design procedures.</div>
+</div>
+
+<!-- MODULE 1 -->
+<div id="m1" class="content">
+  <h2 class="section-main">Module 1 — Acts, IS Codes, NEC, Voltages, Symbols</h2>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">IS 732 &amp; IS 3043 — Features</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">8 marks typical</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li><strong>IS 732</strong> — Code of practice for electrical wiring installations. Covers design, selection, erection, inspection and testing of wiring. Has 5 sections: Terminology, Assessment of general characteristics, Protection for safety, Design &amp; erection of equipment, Inspection &amp; testing.</li>
+      <li>IS 732 applies to all non-industrial and industrial wiring installations. Does NOT apply to public distribution systems, explosive atmosphere locations, lightning conductors, traction, ships, aircraft.</li>
+      <li>Protection requirements under IS 732: electric shock, thermal effects, overcurrent, overvoltage, undervoltage, fault currents, switching for maintenance.</li>
+      <li><strong>IS 3043</strong> — Code of practice for earthing. Gives guidance on system earthing and equipment earthing. Applies to land-based installations only. Divided into 11 sections.</li>
+      <li>IS 3043 covers: earth resistance, current density, earthing arrangements, earth fault protection at consumer premises/substations/overhead lines, static &amp; lightning protection, data processing installation earthing, calculations of earth fault current and earth resistivity.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Electricity Act 2003 — Scope &amp; Features</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">6–8 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li>Replaces Indian Electricity Act 1910, Electricity Supply Act 1948, and Electricity Regulatory Commission Act 1998 — consolidates all into one act.</li>
+      <li><strong>Aims:</strong> Promote competition, protect consumer interests, provide electricity to all areas, ensure transparent subsidy policies, constitute Central/State Regulatory Authorities, establish appellate tribunals.</li>
+      <li><strong>Salient Features:</strong> Delicensing of generation, liberalization of captive power policy, open access to transmission and distribution, stringent penalties for power theft, transparent subsidy management, thrust on rural electrification, constitution of Appellate Tribunal.</li>
+      <li>Adequately takes care of conservation and use of non-conventional energy sources.</li>
+      <li>Simplifies administrative procedures — competition possible not just in generation but all facets including distribution.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">NEC 2011 — Importance &amp; Scope</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">7–8 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li>National Electric Code — regionally adoptable standard for safe installation of electrical wiring and equipment. Part of National Fire Codes series published by NFPA.</li>
+      <li>Unifies practices, procedures and safety requirements. Formulated to elaborate Indian Electricity Rules.</li>
+      <li><strong>8 Parts of NEC 2011:</strong> General &amp; common aspects, Standby generating stations &amp; substations, Non-industrial buildings, Industrial buildings, Outdoor installations, Agricultural premises, Hazardous areas, Solar PV systems.</li>
+      <li><strong>Scope:</strong> Applies to domestic dwellings, offices, shopping centers, hotels, hospitals, sports buildings, industrial premises, agricultural premises, outdoor/temporary installations, solar PV, hazardous areas.</li>
+      <li>Does NOT apply to traction, motor vehicles, ships, aircraft, underground mines, structural lightning protection, public distribution, power generation and transmission.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Graphical Symbols (NEC Standard)</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">5–6 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li>Know symbols for: Circuit breaker, Isolator, Fuse, Switch (one-way, two-way, intermediate), Star-Delta Starter, Auto-transformer Starter, Contactor.</li>
+      <li>Know symbols for: 5A socket outlet, 15A socket outlet, Plug, Ceiling fan, Exhaust fan, Lamp/bulb, Fluorescent lamp.</li>
+      <li>Know line symbols: Overhead line, Underground cable, Neutral, Earth point, AC generator, DC generator, Motor, Synchronous motor.</li>
+      <li>Know winding symbols: Delta (triangle), Star (Y), 3-phase transformer with 3 separate windings.</li>
+      <li>Also know: Fault symbol, Single-pole switch, Double-pole switch, Three-pole switch, Push button, Bell, Buzzer, Siren, Signal lamp.</li>
+    </ul>
+    <div class="tip-box"><strong>Exam tip:</strong> Every year asks 5-6 symbols for 5-6 marks. Practice drawing them from memory. Most common: circuit breaker, star-delta starter, isolator, socket outlets (5A, 15A), auto-transformer, overhead line, fault symbol.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Voltage Classification &amp; Tolerances</div>
+        <div class="badges"><span class="badge warm">2/3 years</span><span class="badge marks">3 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot empty"></div></div>
+    </div>
+    <ul class="points">
+      <li>Single phase AC: 240V, 50Hz, 2-wire. Three phase AC: 415V, 50Hz, 4-wire.</li>
+      <li>Low voltage ≤ 250V. Medium voltage ≤ 650V. HV ≤ 33kV. EHV &gt; 33kV.</li>
+      <li>Distribution: 3.3kV (HV), 11kV (primary distribution), 33kV (EHV). Transmission: 132kV, 220kV. National Grid: 400kV.</li>
+      <li>Tolerances: ±6% for LV/MV. HV: +6% / -9%. EHV: ±12.5%. Indian Electricity Rules: ±5% on nominal voltage. Frequency: ±1% of 50Hz.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Safety Aspects in Electrical System Design</div>
+        <div class="badges"><span class="badge warm">2024 asked 9 marks</span></div>
+      </div>
+    </div>
+    <ul class="points">
+      <li>Two major risks: electric shock current and high temperature due to sparking (burns/fires).</li>
+      <li>6 protective measures: (1) Protection against direct contact — prevent current through body, (2) Protection against indirect contact — auto disconnection, (3) Protection against thermal effects — no fire risk from arcs/hot conductors, (4) Protection against overcurrent — automatic disconnection before dangerous value, (5) Protection against fault currents — conductors rated for fault current, (6) Protection against over/under voltage — surge diverters, rod gaps, undervoltage relays.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- MODULE 2 -->
+<div id="m2" class="content">
+  <h2 class="section-main">Module 2 — Lighting Design, Calculations, Road Lighting</h2>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Core Definitions (3-mark Part A staple)</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">3 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li><strong>Luminous Flux (L):</strong> Total light energy radiated by a source in all directions. Unit = Lumen (lm). Total flux = CP × 4π lumens.</li>
+      <li><strong>Luminous Intensity (I):</strong> Luminous flux per unit solid angle in a given direction. Unit = Candela (Cd).</li>
+      <li><strong>Illuminance (E):</strong> Total luminous flux incident on a surface per unit area. Unit = Lux. 1 lux = 1 lumen/m².</li>
+      <li><strong>Steradian:</strong> Unit of solid angle. A full sphere = 4π steradians.</li>
+      <li><strong>Efficacy:</strong> Measure of how much light a source produces per watt of energy input. Unit = Lumens/Watt (lm/W).</li>
+      <li><strong>Luminaire:</strong> Light fitting that distributes, filters or transforms light; includes all items for fixing and connecting lamps.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Laws of Illumination</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">3–6 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li><strong>Inverse Square Law:</strong> E = I/r² — illuminance is inversely proportional to square of distance. Valid when surface is normal to beam.</li>
+      <li><strong>Cosine Law:</strong> E = I·cosθ/r² — when surface is inclined at angle θ to beam. Also r = h/cosθ, so E = I·cos³θ/h².</li>
+    </ul>
+    <div class="formula-box">
+      E = I / r²   (Inverse Square Law)
+      E = I·cosθ / r²   (Cosine Law)
+      r = h / cosθ  →  E = I·cos³θ / h²
+    </div>
+    <div class="tip-box"><strong>Numerical type:</strong> Lamp at height h, find E at horizontal distance d. Then r = √(h²+d²), cosθ = h/r. Substitute into cosine law. This exact problem appeared in 2023 and 2025.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Average Lumen Method — Number of Lamps</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">4–8 marks numerical</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <div class="formula-box">
+      N = (A × E) / (Ln × CU × LLF)
+      
+      Where:
+        N  = Number of luminaires/lamps required
+        A  = Area of room (m²)
+        E  = Required illuminance (Lux)
+        Ln = Lumen output per lamp
+        CU = Coefficient of Utilization
+        LLF = Light Loss Factor (= Maintenance Factor MF)
+              LLF = 1 / Depreciation Factor (DF)
+    </div>
+    <ul class="points">
+      <li><strong>CU (Coefficient of Utilization):</strong> Ratio of lumens reaching working plane to total lumens given out by lamps. Affected by: lumen output of fitting, shape of room, reflection factors of walls/ceiling, height of ceiling, arrangement of fittings.</li>
+      <li><strong>LLF (Light Loss Factor):</strong> Accounts for light output depreciation. LLF = MF (Maintenance Factor). For clean conditions MF = 0.8; dusty atmosphere MF = 0.4.</li>
+      <li><strong>Depreciation Factor:</strong> DF = 1/MF = 1/LLF.</li>
+      <li>Area per luminaire = Room area / N. Spacing between fixtures = √(Area per fixture).</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Road Lighting Design</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">6–8 marks numerical</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <div class="formula-box">
+      S = (L × LLF × CU) / (lux × W)
+      
+      Where:
+        S   = Spacing between lamp poles (m)
+        L   = Lumen output of lamp
+        LLF = Light Loss Factor
+        CU  = Coefficient of Utilization
+        lux = Required illumination level
+        W   = Width of road (m)
+      
+      Spacing-to-mounting-height ratio = S / MH
+      Must be: 3 ≤ S/MH ≤ 5  (satisfactory design)
+      Also check: S/MH ≥ 1.5 for indoor (spacing ≤ 1.5 × MH)
+    </div>
+    <ul class="points">
+      <li><strong>Road classification by width:</strong> 6–9m → lamps on one side. 9–12m → zigzag both sides. 12–20m → face-to-face both sides. Multi-lane → median + both kerbs.</li>
+      <li>Distance between two light points must not exceed 35m. Average to minimum illuminance ratio ≤ 3 (residential ≤ 6).</li>
+    </ul>
+    <div class="tip-box"><strong>Standard approach:</strong> Calculate S. Find S/MH ratio. If 3 ≤ S/MH ≤ 5 → satisfactory. If not, try the next wattage lamp from the table.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Types of Lamps — Merits &amp; Demerits</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">6 marks theory</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <div class="two-col">
+      <div>
+        <ul class="points">
+          <li><strong>Metal Halide (MH):</strong> High efficacy (66–100 lm/W), better colour rendering, 3–5× more efficient than incandescent. Demerits: light pollution, UV emission if outer glass breaks, uses mercury.</li>
+          <li><strong>HPS (High Pressure Sodium):</strong> Most efficient HID (60–127 lm/W), long life (24000 hrs), warm-up 3–4 min, excellent lumen maintenance. Demerits: doesn't accurately render colours, needs ballast.</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="points">
+          <li><strong>LPS (Low Pressure Sodium):</strong> Most energy efficient commercially (100–183 lm/W), long life (14,000–18,000 hrs). Demerits: monochromatic yellow light (poor colour rendering), expensive to install.</li>
+          <li><strong>LED:</strong> Most efficient, 50,000 hr life, no mercury, lower energy (30–90% savings), maintenance-free, fast switching. Minor demerits: higher upfront cost.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Interior Lighting Design — Good Lighting Scheme</div>
+        <div class="badges"><span class="badge warm">2/3 years</span><span class="badge marks">8 marks</span></div>
+      </div>
+    </div>
+    <ul class="points">
+      <li>3 primary aims: promote work/activities in building, promote safety, create pleasing environment.</li>
+      <li>Factors affecting illumination level: adequacy for preventing strain, visual comfort, high efficiency task performance, pleasantness.</li>
+      <li>Good lighting design: plan brightness pattern (visual performance, safety, amenity), create form and texture, control glare/flicker/stroboscopic effects, select right light source for colour rendering, maintain level differences to prevent accidents, provide emergency lighting, ensure energy conservation.</li>
+      <li>Spacing ≤ 1.5 × mounting height. Distance from wall = half of spacing between adjacent sources.</li>
+      <li>Recommended illumination levels specified in IS 3646.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- MODULE 3 -->
+<div id="m3" class="content">
+  <h2 class="section-main">Module 3 — Domestic Wiring, Protection Devices, Pre-commissioning Tests</h2>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Sub-circuit Determination (Design of Domestic Installation)</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">3–7 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <div class="formula-box">
+      Light sub-circuit: max load = 800W OR max 10 points
+      Power sub-circuit: max load = 3000W, max 2 outlets
+
+      Number of light sub-circuits = Total light load / 800
+      Number of power sub-circuits = Total power load / 3000
+
+      Single phase supply: if total connected load &lt; 5kW
+      Three phase supply (415V, 4-wire): if total load ≥ 5kW
+    </div>
+    <ul class="points">
+      <li>Light and fan wiring and power wiring must be kept separate.</li>
+      <li>In 3-phase installation, load must be distributed equally on all phases.</li>
+      <li>Separate sub-circuit for fans recommended (max 10 fans per circuit).</li>
+      <li>5A sockets counted as 100W each. 15A sockets counted as 1000W each.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">MCB — Types, Working, Selection</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">6–8 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li>Miniature Circuit Breaker — electromechanical device protecting against overload and short circuit. Can be reclosed without manual replacement (unlike fuse).</li>
+      <li><strong>Specifications:</strong> Current rating (A), Short Circuit Rating (kA), Operating Characteristics (B/C/D curves).</li>
+      <li><strong>Type B:</strong> Trips at 3–5× full load current. Used for residential/light commercial — resistive loads (lighting, domestic appliances).</li>
+      <li><strong>Type C:</strong> Trips at 5–10× full load. Used for commercial/industrial — inductive loads (fluorescent lighting, motors). Most common.</li>
+      <li><strong>Type D:</strong> Trips at 10–20× full load. Used for high inrush — transformers, X-ray machines, large motors.</li>
+      <li><strong>By poles:</strong> SP (single phase), DP (single phase with neutral), TP (3-phase, no neutral protection), TPN 3P+N, 4P (full neutral protection, used for unbalanced circuits).</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">MCCB vs MCB</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">6–8 marks</span></div>
+      </div>
+    </div>
+    <ul class="points">
+      <li><strong>MCCB (Moulded Case Circuit Breaker):</strong> Rated current 10A to 2500A, interrupting rating 10kA to 200kA. Trip settings are adjustable. Large in size. Used for industrial/commercial high-power applications. Has thermal/magnetic/electronic trip mechanisms.</li>
+      <li>MCB rated 6A to 100A, interrupting up to 18kA. Trip not adjustable. Small size. Indoor type for homes, schools, offices.</li>
+      <li>MCCB has 3 functions: protection against overload, protection against electrical faults (short circuit), switching capability.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">ELCB / RCCB / RCD / RCBO — Working &amp; Differences</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">4–7 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li><strong>ELCB (old, voltage operated):</strong> Detects rise in potential between protected network and distant earth electrode. No longer used in new construction.</li>
+      <li><strong>RCCB/RCD (current operated):</strong> Continuously measures current through phase and neutral. If imbalance &gt;30mA (leakage to earth), it trips. Monitors permanently for leaking current.</li>
+      <li><strong>RCBO:</strong> RCD + MCB in one unit. Protects against earth leakage (30mA) AND overcurrent/short circuit. Used in Consumer Units. More expensive but superior protection.</li>
+      <li>Most widely used: 30mA (residential) and 100mA (commercial) RCDs.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Pre-commissioning Tests — Domestic Installation</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">7–8 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li><strong>1. Insulation Resistance Test:</strong> Measures ohmic value of insulation using a megohmmeter (Megger). Applied DC voltage: 50, 100, 250, 500 or 1000V. Value must be ≥12.5 MΩ for PVC insulated cables (min 1 MΩ). Tests for no short circuits between live conductors or between live and earth.</li>
+      <li><strong>2. Polarity Test of Switch:</strong> Verifies all switches are connected in the current-carrying (phase) conductor, not neutral. Test lamp glows at full brightness when switch is ON = correct polarity.</li>
+      <li><strong>3. Earth Electrode Resistance Test:</strong> Uses fall-of-potential method with auxiliary electrodes B (iron spike) and A (potential electrode). Graph of earth resistance vs distance plotted. Stable region = true earth resistance. Factors affecting: shape/material of electrode, depth, specific resistance of soil, moisture content.</li>
+      <li><strong>4. Earth Continuity Test:</strong> Checks good connection between earth pin of plug and case of appliance. Resistance &lt;0.1 ohms = good earth connection. Carried out using PAT Tester (Portable Appliance Tester).</li>
+    </ul>
+    <div class="tip-box"><strong>Key numbers to remember:</strong> Insulation resistance ≥ 12.5 MΩ (min 1 MΩ). Earth continuity &lt; 0.1 Ω (100 mΩ). RCD trip: 30 mA residential, 100 mA commercial.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Domestic Wiring Design — Step by Step</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">10 marks design problem</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li><strong>Step 1:</strong> Estimate load per room using NEC (lights, fans, sockets) from room dimensions.</li>
+      <li><strong>Step 2:</strong> Segregate into light load and power load. Total light load = sum of all lamps + fans + 5A sockets (at 100W each). Total power load = sum of 15A sockets (at 1000W each) + appliances.</li>
+      <li><strong>Step 3:</strong> Determine supply type — single phase if &lt;5kW, three phase if ≥5kW.</li>
+      <li><strong>Step 4:</strong> Calculate number of sub-circuits — light circuits (800W or 10 points per circuit), power circuits (3000W max, 2 outlets max).</li>
+      <li><strong>Step 5:</strong> Select cables — 1.5mm² for light/fan circuits, 2.5mm² for power circuits, 4mm²+ for high loads.</li>
+      <li><strong>Step 6:</strong> Calculate voltage drop = (IL × Lp) / (IR × LR). Should not exceed 6% of 240V = 14.4V.</li>
+      <li><strong>Step 7:</strong> Draw SLD showing MSB → DB → sub-circuits with MCB ratings.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- MODULE 4 -->
+<div id="m4" class="content">
+  <h2 class="section-main">Module 4 — Industrial Wiring, Substations, Motor Circuits, Earthing</h2>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Substation Design — SLD &amp; Materials List</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">10–14 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li><strong>Types:</strong> Outdoor (pole-mounted for &lt;250kVA, plinth-mounted for larger), Indoor (for densely populated areas, high-rise, industrial). For &lt;300kVA in dense area → choose indoor/compact type.</li>
+      <li><strong>11kV Outdoor Substation components:</strong> HT Load Break Switch (LBS) / Vacuum Circuit Breaker (VCB), Lightning Arrestor, 11kV/415V Delta-Star transformer, LT panel with MCCB/ACB on outgoing, energy meter, earthing system.</li>
+      <li><strong>Material list for 300kVA substation:</strong> 11kV Ring Main Unit (VCB/LBS), Distribution Transformer 11kV/415V, LT Switchboard with MCCB, Bus bars (copper/aluminium), Current Transformers (CT), Energy Meters, Earth Electrodes, Cables (HT XLPE + LT AYFY), Lightning Arrestors, Cable Termination Kits.</li>
+      <li>For capacities &lt;1000kVA → HT LBS sufficient. &gt;1000kVA → VCB required.</li>
+      <li>Oil-filled CB or oil-filled SFU NOT to be used on LT secondary side. Use dry-type transformer in basements.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Motor Circuit — Cable &amp; Protection Selection</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">4–8 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <div class="formula-box">
+      For 3-phase motor:
+      Full Load Current IL = (HP × 746) / (√3 × V × η × pf)   [3-phase]
+      Full Load Current IL = (HP × 746) / (V × η × pf)          [1-phase]
+      
+      Cable selection: based on IL and cable rating (Ir)
+      Voltage drop = (IL × Lp) / (Ir × LR) × rated voltage
+      
+      MCB/MCCB rating: 125% of full load current (for motor)
+      Fuse rating: 200-250% of full load current (for motor starting)
+    </div>
+    <ul class="points">
+      <li>Cable is copper conductor PVC/XLPE insulated. Size from tables — choose cable whose rated current ≥ full load current.</li>
+      <li>Check voltage drop: must be within permissible limit (6% of supply voltage = 14.4V for 240V, 24.9V for 415V).</li>
+      <li>Motor circuit SLD must show: Supply → Isolator → MCCB/Fuse → Contactor → Overload Relay → Motor.</li>
+      <li>For 3-phase motors: Type C MCB. Overload relay set at 100–125% of full load current.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Earthing System Design</div>
+        <div class="badges"><span class="badge warm">2/3 years</span><span class="badge marks">8 marks numerical</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot empty"></div></div>
+    </div>
+    <div class="formula-box">
+      For plate earth electrode:
+      Resistance R = ρ / (2 × L × W)   [for plates, approx]
+      Or R = ρ × (1/L + 1/b)           [from IS 3043]
+      
+      Earth conductor cross-section A = Fault current / Current density
+      (Current density for copper = 118 A/mm²)
+      
+      Number of earth pits (for parallel connection):
+      n = R_single / Required R_earth
+    </div>
+    <ul class="points">
+      <li>Earth electrode: copper plate (1200mm × 1200mm × 12mm) or GI pipe. Must be buried below permanent moisture level.</li>
+      <li>Factors affecting earth resistance: shape/material of electrode, depth of burial, soil resistivity, moisture content of soil.</li>
+      <li>Earth continuity conductor must carry fault current without excessive temperature. Sized using current density of copper (118 A/mm²).</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Short Circuit Current Calculation</div>
+        <div class="badges"><span class="badge warm">2025 — 14 marks full question</span></div>
+      </div>
+    </div>
+    <div class="formula-box">
+      System fault level (MVA method):
+      Isc = MVA_fault / (√3 × kV)
+      
+      For transformer: %Z = (Ibase × Ztransformer) / Vbase × 100
+      
+      Impedance of overhead line:
+      ZL = resistance + jXL  (from cable/line data)
+      
+      Peak short circuit current = 2.55 × Irms_sc
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Pre-commissioning Tests — 11kV Substation</div>
+        <div class="badges"><span class="badge warm">2/3 years</span><span class="badge marks">4 marks</span></div>
+      </div>
+    </div>
+    <ul class="points">
+      <li>Tests: HV insulation resistance test (Megger), High voltage withstand test (power frequency), CB timing and trip tests, Earth resistance measurement, CT and PT ratio tests, Protective relay testing, Oil dielectric strength test (for oil-filled transformers), Polarity and phase sequence check, No-load and load tap changer tests.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- MODULE 5 -->
+<div id="m5" class="content">
+  <h2 class="section-main">Module 5 — Solar PV, Generators, High-rise Buildings, Energy Conservation</h2>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Solar PV System Design — Complete Procedure</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">10–14 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <div class="formula-box">
+STEP 1: Calculate total watt-hours per day
+  Total Wh/day = Σ (Power of appliance × Hours of use)
+
+STEP 2: Wh/day to be generated by panels (include 30% extra for losses)
+  Panel Wh/day = 1.3 × Total Wh/day
+
+STEP 3: Panel Generation Factor (PGF)
+  Without MPPT: PGF = Lowest solar irradiation (kWh/m²/day) × 0.69
+  With MPPT:    PGF = Lowest solar irradiation × 0.85 × 0.95 × 0.90 × 0.95 × 0.90
+              Derating factor = 0.85×0.95×0.90×0.95×0.90 = 0.62 (without MPPT)
+              Derating factor = 0.85×0.95×0.90×0.95 = 0.69 (with MPPT)
+
+STEP 4: Panel size required (Wp)
+  Panel size = Panel Wh/day / PGF
+
+STEP 5: Number of PV modules
+  N = Panel size required / Rated Wp of each module
+
+STEP 6: Battery sizing
+  Assumptions: efficiency = 85%, depth of discharge = 50%, cloudy days = 2
+  Battery energy = (Total Wh/day × cloudy days) / (0.85 × 0.5)
+  Battery Ah = Battery energy / System voltage (12V/24V/48V)
+  (12V for ≤500W, 24V for ≤1000W, 48V for ≤2000W)
+
+STEP 7: Charge controller
+  Rating = 1.3 × Short circuit current of all parallel PV strings
+    </div>
+    <ul class="points">
+      <li>Lowest solar irradiation for TVM, Kerala = 4.83 kWh/m²/day (June). This is the design month.</li>
+      <li>PGF unit = Wh/Wp/day. This tells how much energy each Wp of panel delivers per day.</li>
+      <li>Select battery from standard table: 6LMS150L = 12V, 150Ah; 6LMS100L = 12V, 100Ah, etc.</li>
+      <li>Inverter selection: AC output power ≥ total connected AC load. Also check DC input voltage matches PV array voltage.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Solar PV Components &amp; System Types</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">8–9 marks theory</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <div class="two-col">
+      <div>
+        <ul class="points">
+          <li><strong>Grid-connected system:</strong> PV array → Inverter/PCU → Distribution panel → Electric utility (bidirectional). No battery. Feeds grid when generation exceeds demand. Safety: must not feed grid when grid is down.</li>
+          <li><strong>Stand-alone system:</strong> PV array → Charge controller → Battery → Inverter → AC loads. Also DC loads direct from battery. Battery needs replacement every 5–6 years. Wastage of surplus energy is a drawback.</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="points">
+          <li><strong>Module types:</strong> Monocrystalline (15–19% efficiency), Polycrystalline (11–15%), Amorphous/thin film (5–8%), Hybrid.</li>
+          <li><strong>Key components:</strong> PV modules, Array mounting racks, Grounding system, Junction box, Surge protection, Inverter, Meters, Disconnector, Battery bank, Charge controller, Battery disconnect.</li>
+          <li><strong>Charge controller:</strong> Prevents overcharging and over-discharging. Prevents reverse current at night.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Standby Generator — Ratings &amp; Design Criteria</div>
+        <div class="badges"><span class="badge hot">3/3 years</span><span class="badge marks">5–7 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <ul class="points">
+      <li><strong>Continuous power rating:</strong> Engine can supply rated power for unlimited time.</li>
+      <li><strong>Prime power rating:</strong> Engine can supply base load for unlimited time AND 100% rated power for limited time (typically 500 hrs/year at full load, base load 70% of rated).</li>
+      <li><strong>Standby power rating:</strong> Maximum power deliverable, limited to less than 500 hrs/year. Used exclusively for emergency backup. Typical diesel set: Continuous 15.5kW, Prime 17.6kW, Standby 18.8kW.</li>
+      <li><strong>AMF (Automatic Mains Failure) panel:</strong> Monitors mains voltage continuously using PFD (Phase Failure Detector). When mains fails → trips ACB → starts generator automatically → connects load to generator. Reconnects mains when voltage returns. Three types: microcontroller-based, PLC-based, relay-based.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">High-Rise Building — Special Electrical Requirements</div>
+        <div class="badges"><span class="badge hot">2/3 years + 2025</span><span class="badge marks">8 marks</span></div>
+      </div>
+      <div class="priority-bar"><div class="dot filled"></div><div class="dot filled"></div><div class="dot empty"></div></div>
+    </div>
+    <ul class="points">
+      <li>High-rise = building &gt;15m above ground level. Comes under Section 54 of Electricity Act 2003 and Rule 50(A) of Indian Electricity Rules 1956.</li>
+      <li><strong>Substation:</strong> Power supply via transformer substation receiving 11kV HT. Only dry-type transformer in basement/ground floor. If connected load &gt;50kVA → separate transformer by owner. HT LBS/VCB as primary protection.</li>
+      <li><strong>Rising Mains:</strong> Vertical busbars carrying power from substation to each floor. Cables must be routed through cable ducts accessible from all floors. Fire barriers in cable ducts on all floors. Grid and generator cables must be segregated.</li>
+      <li><strong>Metering panel:</strong> At ground floor. Max 8 outlets for 3-phase, 12 for 1-phase supply.</li>
+      <li><strong>DB:</strong> IP42 Double Door. Incomer = RCBO or ELCB+MCB (30mA). Outgoing MCBs: B-type for light/resistive, C-type for highly inductive.</li>
+      <li><strong>Emergency supply:</strong> Min 20% of connected load. Separate emergency DB. Need acoustic enclosure (sound &lt;70dB), exhaust pipe extended to top, structural fitness certification.</li>
+      <li><strong>Fire protection:</strong> Automatic fire detection and alarm, sprinklers, hose reels, fire extinguishers, illuminated exit signs, fire lift, wet riser system, PA system.</li>
+      <li>Minimum 2 lifts mandatory. BMS (Building Management System) integration for monitoring all services.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">APFC Panel &amp; Power Factor Improvement</div>
+        <div class="badges"><span class="badge warm">2/3 years</span><span class="badge marks">3–7 marks</span></div>
+      </div>
+    </div>
+    <ul class="points">
+      <li><strong>APFC (Automatic Power Factor Correction):</strong> Automatically corrects/improves power factor near unity by switching capacitor banks in/out as required.</li>
+      <li><strong>Main parts:</strong> Capacitor bank, Microcontroller (brain — analyzes PF and decides how much capacitance to connect), Power Factor Sensor/Transducer (combination of CT and PF sensor), Thyristor/TRIAC (electronic switch that connects/disconnects capacitor banks on microcontroller signal).</li>
+      <li>Mostly inductive loads (motors, transformers) cause lagging PF — capacitor banks improve it.</li>
+      <li><strong>Delta capacitor bank:</strong> Low to medium voltage. More KVAR, can circulate harmonic current. High voltage stress reduces capacitor life.</li>
+      <li><strong>Star capacitor bank:</strong> Medium to high voltage. Lower voltage stress on capacitors. Grounded star or ungrounded star.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="topic-title">Energy Conservation Techniques</div>
+        <div class="badges"><span class="badge warm">2025 — 6 marks</span></div>
+      </div>
+    </div>
+    <ul class="points">
+      <li><strong>Lighting:</strong> Replace incandescent with CFL (2/3 less energy) or LED (70–90% less). Use T-8 fluorescent instead of T-12. Use ENERGY STAR certified lamps. Install occupancy/motion sensors. Use photo sensors and time clocks. LED exit signs (95% less than incandescent).</li>
+      <li><strong>Motors:</strong> Use energy-efficient motors (3–4% higher efficiency). Apply VFDs (Variable Frequency Drives) for variable load. Schedule maintenance, regular lubrication. Improve power factor. Avoid motor running at no-load. APFC panels to improve PF and reduce reactive power losses.</li>
+      <li><strong>Power:</strong> ENERGY STAR certified AC (10% less energy). Solar water heating (cuts hot water costs by half). Power factor improvement reduces reactive power losses and kVA demand.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
